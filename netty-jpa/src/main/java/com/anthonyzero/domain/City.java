@@ -1,12 +1,17 @@
 package com.anthonyzero.domain;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 
+/**
+ * @author admin
+ */
 @Data
 @Entity
 @Table(name = "city")
+@Accessors(chain = true)
 public class City {
 
     @Id

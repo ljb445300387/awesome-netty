@@ -13,6 +13,7 @@ public class CityServiceImpl implements CityService {
     @Autowired
     private CityDao cityDao;
 
+    @Override
     @Async
     public Boolean saveCity(City city) { //基本类型要用包装类型
         System.out.println("进入业务方法：当前线程名：" + Thread.currentThread().getName());

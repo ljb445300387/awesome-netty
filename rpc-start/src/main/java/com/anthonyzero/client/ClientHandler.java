@@ -24,8 +24,10 @@ public class ClientHandler extends SimpleChannelInboundHandler<Response> {
         this.port = port;
     }
 
+    @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Response response) throws Exception {
-        this.response = response; //返回结果
+        //返回结果
+        this.response = response;
         synchronized (obj) {
             obj.notify();
         }

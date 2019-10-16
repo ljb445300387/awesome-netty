@@ -11,6 +11,8 @@ import java.util.List;
 
 /**
  * 作为server端的编码解码器  一般先进（解码） 出去（编码）
+ *
+ * @author admin
  */
 @ChannelHandler.Sharable
 public class PacketCodecHandler extends MessageToMessageCodec<ByteBuf, Packet> {
@@ -18,18 +20,17 @@ public class PacketCodecHandler extends MessageToMessageCodec<ByteBuf, Packet> {
     public static final PacketCodecHandler INSTANCE = new PacketCodecHandler();
 
     private PacketCodecHandler() {
-
     }
 
     /**
      * 编码  出方向 发生
+     *
      * @param channelHandlerContext
      * @param packet
      * @param list
-     * @throws Exception
      */
     @Override
-    protected void encode(ChannelHandlerContext channelHandlerContext, Packet packet, List<Object> list) throws Exception {
+    protected void encode(ChannelHandlerContext channelHandlerContext, Packet packet, List<Object> list) {
         ByteBuf byteBuf = channelHandlerContext.channel().alloc().ioBuffer();
         PacketCodec.INSTANCE.encode(byteBuf, packet);
         list.add(byteBuf);
@@ -37,13 +38,13 @@ public class PacketCodecHandler extends MessageToMessageCodec<ByteBuf, Packet> {
 
     /**
      * 解码 入方向 发生
+     *
      * @param channelHandlerContext
      * @param byteBuf
      * @param list
-     * @throws Exception
      */
     @Override
-    protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
+    protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) {
         Packet packet = PacketCodec.INSTANCE.decode(byteBuf);
         list.add(packet);
     }

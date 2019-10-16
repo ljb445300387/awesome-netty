@@ -8,9 +8,14 @@ import io.netty.channel.group.ChannelGroup;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * @author admin
+ */
 public class SessionUtil {
-    private static final Map<String, Channel> userIdChannelMap = new ConcurrentHashMap<>(); //用户id -> Channel
-    private static final Map<String, ChannelGroup> groupIdChannelGroupMap = new ConcurrentHashMap<>(); //群组 -》ChannelGroup
+    //用户id -> Channel
+    private static final Map<String, Channel> userIdChannelMap = new ConcurrentHashMap<>();
+    //群组 -> ChannelGroup
+    private static final Map<String, ChannelGroup> groupIdChannelGroupMap = new ConcurrentHashMap<>();
 
     public static void bindSession(Channel channel, Session session) {
         userIdChannelMap.put(session.getUserId(), channel);
@@ -18,27 +23,26 @@ public class SessionUtil {
     }
 
     public static Session getSession(Channel channel) {
-
         return channel.attr(Attributes.SESSION).get();
     }
 
     /**
      * 判断是否登录
+     *
      * @param channel
      * @return
      */
     public static boolean hasLogin(Channel channel) {
-
         return getSession(channel) != null;
     }
 
     /**
      * 通过userid 获取自身channel
+     *
      * @param userId
      * @return
      */
     public static Channel getChannel(String userId) {
-
         return userIdChannelMap.get(userId);
     }
 
@@ -51,7 +55,6 @@ public class SessionUtil {
             System.out.println(session + " 退出登录!");
         }
     }
-
 
     public static void bindChannelGroup(String groupId, ChannelGroup channelGroup) {
         groupIdChannelGroupMap.put(groupId, channelGroup);

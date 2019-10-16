@@ -4,6 +4,9 @@ import com.anthonyzero.protocol.Command;
 import com.anthonyzero.protocol.Packet;
 import lombok.Data;
 
+/**
+ * @author admin
+ */
 @Data
 public class QuitGroupResponsePacket extends Packet {
     private String groupId;
@@ -11,6 +14,7 @@ public class QuitGroupResponsePacket extends Packet {
     private boolean success;
 
     private String errorMsg;
+
     @Override
     public Byte getCommand() {
         return Command.QUIT_GROUP_RESPONSE;

@@ -7,13 +7,16 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 
 /**
  * 拆包器
+ * @author admin
  */
-public class Spliter extends LengthFieldBasedFrameDecoder {
+public class Splitter extends LengthFieldBasedFrameDecoder {
 
-    private static final int LENGTH_FIELD_OFFSET = 7; //长度域偏移量 4 + 1 + 1 + 1
-    private static final int LENGTH_FIELD_LENGTH = 4; //长度域的长度  4
+    //长度域偏移量 4 + 1 + 1 + 1
+    private static final int LENGTH_FIELD_OFFSET = 7;
+    //长度域的长度  4
+    private static final int LENGTH_FIELD_LENGTH = 4;
 
-    public Spliter() {
+    public Splitter() {
         //第一个参数指的是数据包的最大长度，第二个参数指的是长度域的偏移量，第三个参数指的是长度域的长度
         super(Integer.MAX_VALUE, LENGTH_FIELD_OFFSET, LENGTH_FIELD_LENGTH);
     }

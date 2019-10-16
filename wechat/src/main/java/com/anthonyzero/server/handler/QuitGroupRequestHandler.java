@@ -8,20 +8,23 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
 
+/**
+ * @author admin
+ */
 @ChannelHandler.Sharable
 public class QuitGroupRequestHandler extends SimpleChannelInboundHandler<QuitGroupRequestPacket> {
     public static final QuitGroupRequestHandler INSTANCE = new QuitGroupRequestHandler();
 
     private QuitGroupRequestHandler() {
-
     }
+
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, QuitGroupRequestPacket quitGroupRequestPacket) throws Exception {
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext,
+                                QuitGroupRequestPacket quitGroupRequestPacket) {
         //获取群对应的 channelGroup，然后将当前用户的 channel 移除
         String groupId = quitGroupRequestPacket.getGroupId();
         QuitGroupResponsePacket response = new QuitGroupResponsePacket();
         response.setGroupId(groupId);
-
         ChannelGroup channelGroup = SessionUtil.getChannelGroup(groupId);
         if (channelGroup == null) {
             response.setSuccess(false);

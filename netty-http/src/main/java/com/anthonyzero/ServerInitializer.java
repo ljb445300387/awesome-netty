@@ -8,6 +8,7 @@ import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.HttpServerExpectContinueHandler;
 
 public class ServerInitializer extends ChannelInitializer<NioSocketChannel> {
+    @Override
     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
         ChannelPipeline pipeline = nioSocketChannel.pipeline();
 
@@ -18,7 +19,7 @@ public class ServerInitializer extends ChannelInitializer<NioSocketChannel> {
         /**
          * 在处理POST消息体时需要加上
          */
-        pipeline.addLast(new HttpObjectAggregator(1024*1024));
+        pipeline.addLast(new HttpObjectAggregator(1024 * 1024));
         pipeline.addLast(new HttpServerExpectContinueHandler());
         pipeline.addLast(new ServerHandler());
     }

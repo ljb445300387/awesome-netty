@@ -7,7 +7,10 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
-public class ServerHandler extends ChannelInboundHandlerAdapter {
+/**
+ * @author admin
+ */
+public class ServerInHandler extends ChannelInboundHandlerAdapter {
 
     private static ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 

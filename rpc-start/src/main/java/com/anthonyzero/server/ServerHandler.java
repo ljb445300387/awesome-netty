@@ -13,11 +13,13 @@ import java.util.Map;
  */
 public class ServerHandler extends SimpleChannelInboundHandler<Request> {
 
-    private Map<String,Object> serviceMap; //服务注册存放
+    //服务注册存放
+    private Map<String,Object> serviceMap;
     public ServerHandler(Map<String, Object> serviceMap) {
         this.serviceMap = serviceMap;
     }
 
+    @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Request request) throws Exception {
         Response response = new Response();
         //调用请求类的请求方法执行并返回执行结果
@@ -25,10 +27,13 @@ public class ServerHandler extends SimpleChannelInboundHandler<Request> {
         try {
             Object requestBean = serviceMap.get(request.getClassName());
             Class<?> requestClass = Class.forName(request.getClassName());
-            Method method = requestClass.getMethod(request.getMethodName(), request.getParameterTypes()); //获取执行方法
-            invoke = method.invoke(requestBean, request.getParameters()); //调用
+            //获取执行方法
+            Method method = requestClass.getMethod(request.getMethodName(), request.getParameterTypes());
+            //调用
+            invoke = method.invoke(requestBean, request.getParameters());
             response.setRequestId(request.getRequestId());
-            response.setResult(invoke); //结果
+            //结果
+            response.setResult(invoke);
         } catch (Exception e) {
             response.setError(e.getCause());
             response.setRequestId(request.getRequestId());

@@ -12,21 +12,17 @@ import java.net.URL;
 
 public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
-
     private final String wsUri;
     private static final File INDEX;
 
     static {
-        URL location = HttpRequestHandler.class
-                .getProtectionDomain()
-                .getCodeSource().getLocation();
+        URL location = HttpRequestHandler.class.getProtectionDomain().getCodeSource().getLocation();
         try {
             String path = location.toURI() + "index.html";
             path = !path.contains("file:") ? path : path.substring(5);
             INDEX = new File(path);
         } catch (URISyntaxException e) {
-            throw new IllegalStateException(
-                    "Unable to locate index.html", e);
+            throw new IllegalStateException("Unable to locate index.html", e);
         }
     }
 
@@ -35,36 +31,28 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
     }
 
     @Override
-    public void channelRead0(ChannelHandlerContext ctx,
-                             FullHttpRequest request) throws Exception {
-        if (wsUri.equalsIgnoreCase(request.getUri())) {
+    public void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception {
+        if (wsUri.equalsIgnoreCase(request.uri())) {
             ctx.fireChannelRead(request.retain());
         } else {
-            if (HttpHeaders.is100ContinueExpected(request)) {
+            if (HttpUtil.is100ContinueExpected(request)) {
                 send100Continue(ctx);
             }
             RandomAccessFile file = new RandomAccessFile(INDEX, "r");
-            HttpResponse response = new DefaultHttpResponse(
-                    request.getProtocolVersion(), HttpResponseStatus.OK);
-            response.headers().set(
-                    HttpHeaders.Names.CONTENT_TYPE,
-                    "text/html; charset=UTF-8");
-            boolean keepAlive = HttpHeaders.isKeepAlive(request);
+            HttpResponse response = new DefaultHttpResponse(request.protocolVersion(), HttpResponseStatus.OK);
+            response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/html; charset=UTF-8");
+            boolean keepAlive = HttpUtil.isKeepAlive(request);
             if (keepAlive) {
-                response.headers().set(
-                        HttpHeaders.Names.CONTENT_LENGTH, file.length());
-                response.headers().set( HttpHeaders.Names.CONNECTION,
-                        HttpHeaders.Values.KEEP_ALIVE);
+                response.headers().set(HttpHeaderNames.CONTENT_LENGTH, file.length());
+                response.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
             }
             ctx.write(response);
             if (ctx.pipeline().get(SslHandler.class) == null) {
-                ctx.write(new DefaultFileRegion(
-                        file.getChannel(), 0, file.length()));
+                ctx.write(new DefaultFileRegion(file.getChannel(), 0, file.length()));
             } else {
                 ctx.write(new ChunkedNioFile(file.getChannel()));
             }
-            ChannelFuture future = ctx.writeAndFlush(
-                    LastHttpContent.EMPTY_LAST_CONTENT);
+            ChannelFuture future = ctx.writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT);
             if (!keepAlive) {
                 future.addListener(ChannelFutureListener.CLOSE);
             }
@@ -72,13 +60,12 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
     }
 
     private static void send100Continue(ChannelHandlerContext ctx) {
-        FullHttpResponse response = new DefaultFullHttpResponse(
-                HttpVersion.HTTP_1_1, HttpResponseStatus.CONTINUE);
+        FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.CONTINUE);
         ctx.writeAndFlush(response);
     }
+
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
-            throws Exception {
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         cause.printStackTrace();
         ctx.close();
     }

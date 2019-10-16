@@ -33,6 +33,7 @@ public class RPCServer implements ApplicationContextAware {
                     .channel(NioServerSocketChannel.class)
                     .localAddress(new InetSocketAddress(port))
                     .childHandler(new ChannelInitializer<NioSocketChannel>() {
+                        @Override
                         protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
                             ChannelPipeline pipeline = nioSocketChannel.pipeline();
                             pipeline.addLast(ServerCoderHandler.INSTANCE);

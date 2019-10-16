@@ -22,11 +22,13 @@ public class NettyClient {
                     .option(ChannelOption.TCP_NODELAY, true)
                     .remoteAddress(new InetSocketAddress("127.0.0.1", 7000))
                     .handler(new ChannelInitializer<SocketChannel>() {
+                        @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             ChannelPipeline pipeline = socketChannel.pipeline();
-                            pipeline.addLast("decoder",new StringDecoder()); //需添加编码解码器 否则操作数据相关事件如read不回调
-                            pipeline.addLast("encoder",new StringEncoder());
-                            pipeline.addLast(new ClientHandler());
+                            //需添加编码解码器 否则操作数据相关事件如read不回调
+                            pipeline.addLast("decoder", new StringDecoder());
+                            pipeline.addLast("encoder", new StringEncoder());
+                            pipeline.addLast(new ClientInHandler());
                             pipeline.addLast(new ClientOutHandler());
                         }
                     });

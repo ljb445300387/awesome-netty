@@ -30,6 +30,7 @@ public class EchoClient {
                     .remoteAddress(new InetSocketAddress(host, port))
                     .handler(new ChannelInitializer<SocketChannel>() {
 
+                        @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             socketChannel.pipeline().addLast(new EchoClientHandler());
                         }
@@ -44,7 +45,11 @@ public class EchoClient {
 
     public static void main(String[] args) throws Exception {
         final ThreadPoolExecutor executor = new ThreadPoolExecutor(
-                5, 20, 1, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(80));
+                5,
+                20,
+                1,
+                TimeUnit.SECONDS,
+                new LinkedBlockingQueue<Runnable>(80));
         for (int i = 0; i < 100; i++) {
             executor.execute(new Runnable() {
                 public void run() {

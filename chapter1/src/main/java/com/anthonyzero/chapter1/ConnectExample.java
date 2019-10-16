@@ -17,7 +17,7 @@ import java.nio.charset.Charset;
 public class ConnectExample {
     private static final Channel CHANNEL_FROM_SOMEWHERE = new NioSocketChannel();
 
-    public static void connect()  {
+    public static void connect() {
         Channel channel = CHANNEL_FROM_SOMEWHERE;
 
         ChannelFuture channelFuture = channel.connect(new InetSocketAddress("192.168.0.1", 25));

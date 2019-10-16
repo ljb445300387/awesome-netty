@@ -5,12 +5,14 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
+/**
+ * @author admin
+ */
 @ChannelHandler.Sharable
 public class AuthHandler extends ChannelInboundHandlerAdapter {
     public static final AuthHandler INSTANCE = new AuthHandler();
 
     private AuthHandler() {
-
     }
 
     @Override
@@ -19,11 +21,12 @@ public class AuthHandler extends ChannelInboundHandlerAdapter {
         if (!SessionUtil.hasLogin(ctx.channel())) {
             //如果未登录，直接强制关闭连接
             ctx.channel().close();
-        } else {
-            // 已经登录 就把读到的数据向下传递，传递给后续指令处理器
-            ctx.pipeline().remove(this);  //热插拔
-            super.channelRead(ctx, msg);
+            return;
         }
+        // 已经登录 就把读到的数据向下传递，传递给后续指令处理器
+        //热插拔
+        ctx.pipeline().remove(this);
+        super.channelRead(ctx, msg);
     }
 
     @Override

@@ -10,6 +10,9 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.scheduling.annotation.EnableAsync;
 
+/**
+ * @author admin
+ */
 @SpringBootApplication
 @EnableAsync
 public class Application implements ApplicationRunner {
@@ -23,6 +26,7 @@ public class Application implements ApplicationRunner {
                 .run(args);
     }
 
+    @Override
     public void run(ApplicationArguments args) throws Exception {
         nettyServer.start();
     }

@@ -25,10 +25,11 @@ public class NettyServer {
                     .channel(NioServerSocketChannel.class)
                     .localAddress(new InetSocketAddress(7000))
                     .childHandler(new ChannelInitializer<SocketChannel>() {
+                        @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             socketChannel.pipeline().addLast("decoder",new StringDecoder(CharsetUtil.UTF_8));
                             socketChannel.pipeline().addLast("encoder",new StringEncoder(CharsetUtil.UTF_8));
-                            socketChannel.pipeline().addLast(new ServerHandler());
+                            socketChannel.pipeline().addLast(new ServerInHandler());
                             socketChannel.pipeline().addLast(new ServerOutHandler());
                         }
                     })

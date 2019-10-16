@@ -8,6 +8,9 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
 
+/**
+ * @author admin
+ */
 @ChannelHandler.Sharable
 public class JoinGroupRequestHandler extends SimpleChannelInboundHandler<JoinGroupRequestPacket> {
     public static final JoinGroupRequestHandler INSTANCE = new JoinGroupRequestHandler();
@@ -17,7 +20,8 @@ public class JoinGroupRequestHandler extends SimpleChannelInboundHandler<JoinGro
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, JoinGroupRequestPacket joinGroupRequestPacket) throws Exception {
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext,
+                                JoinGroupRequestPacket joinGroupRequestPacket) throws Exception {
         String groupId = joinGroupRequestPacket.getGroupId();
         JoinGroupResponsePacket response = new JoinGroupResponsePacket();
         response.setGroupId(groupId);

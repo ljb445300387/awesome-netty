@@ -7,11 +7,16 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ThreadPoolExecutor;
 
+/**
+ * @author admin
+ */
 @Data
 @Configuration
+@Component
 @ConfigurationProperties(prefix = "thread.pool")
 public class ThreadPoolConfig {
 
@@ -30,7 +35,8 @@ public class ThreadPoolConfig {
         executor.setCorePoolSize(coreSize);
         executor.setMaxPoolSize(maxSize);
         executor.setKeepAliveSeconds(aliveTime);
-        executor.setQueueCapacity(queueCapacity);  //LinkedBlockingQueue
+        //LinkedBlockingQueue
+        executor.setQueueCapacity(queueCapacity);
         executor.setThreadNamePrefix("business-");
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         return executor;

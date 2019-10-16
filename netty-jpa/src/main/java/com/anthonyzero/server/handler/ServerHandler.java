@@ -17,36 +17,37 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author admin
+ */
 @Slf4j
 @Component
 @ChannelHandler.Sharable
 public class ServerHandler extends ChannelInboundHandlerAdapter {
-
     @Autowired
     private ChannelRepository channelRepository;
     @Autowired
     private CityService cityService;
     @Autowired
     private CityDao cityDao;
-    private static final ThreadPoolExecutor EXECUTOR = new ThreadPoolExecutor(1, 5, 20, TimeUnit.SECONDS, new ArrayBlockingQueue<>(50));
+    private static final ThreadPoolExecutor EXECUTOR = new ThreadPoolExecutor(
+            1,
+            5,
+            20,
+            TimeUnit.SECONDS,
+            new ArrayBlockingQueue<>(50));
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         String stringMessage = (String) msg;
-        //: split
         String[] splitMessage = stringMessage.split(":");
 
-        if (splitMessage.length != 2 ) {
+        if (splitMessage.length != 2) {
             ctx.channel().writeAndFlush(stringMessage + "\n\r");
             return;
         }
 
-
-        City city = new City();
-        city.setName("重庆");
-        city.setCountryCode("465200");
-        city.setDistrict("xxxxxxxxx");
-        city.setPopulation(31000000);
+        City city = new City().setName("重庆").setCountryCode("465200").setDistrict("xxxxxxxxx").setPopulation(31000000);
         Boolean success = cityService.saveCity(city);
         System.out.println("success是否为空？" + (success == null)); //异步 结果直接返回null
 
@@ -67,8 +68,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
         System.out.println(Thread.currentThread().getName());
         // send other channel
-        if (channelRepository.get(splitMessage[0]) != null ) {
-            channelRepository.get(splitMessage[0]).writeAndFlush( splitMessage[1] + "\n\r");
+        if (channelRepository.get(splitMessage[0]) != null) {
+            channelRepository.get(splitMessage[0]).writeAndFlush(splitMessage[1] + "\n\r");
         }
     }
 
@@ -94,7 +95,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void channelInactive(ChannelHandlerContext ctx){
+    public void channelInactive(ChannelHandlerContext ctx) {
         Assert.notNull(this.channelRepository, "[Assertion failed] - ChannelRepository is required; it must not be null");
 
         String channelKey = ctx.channel().remoteAddress().toString().split(":")[1];

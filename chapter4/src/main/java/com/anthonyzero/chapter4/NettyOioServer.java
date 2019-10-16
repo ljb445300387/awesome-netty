@@ -16,8 +16,7 @@ import java.nio.charset.Charset;
  */
 public class NettyOioServer {
 
-    public void server(int port)
-            throws Exception {
+    public void server(int port) throws Exception {
         final ByteBuf buf = Unpooled.unreleasableBuffer(Unpooled.copiedBuffer("Hi!\r\n", Charset.forName("UTF-8")));
         EventLoopGroup group = new OioEventLoopGroup();
         try {
@@ -27,8 +26,7 @@ public class NettyOioServer {
                     .localAddress(new InetSocketAddress(port))
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
-                        public void initChannel(SocketChannel ch)
-                                throws Exception {
+                        public void initChannel(SocketChannel ch) throws Exception {
                             ch.pipeline().addLast(
                                     new ChannelInboundHandlerAdapter() {
                                         @Override

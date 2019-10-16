@@ -1,5 +1,9 @@
 package com.anthonyzero.protocol;
 
+/**
+ * @author admin
+ */
+@SuppressWarnings("AlibabaAvoidCommentBehindStatement")
 public interface Command {
 
     Byte LOGIN_REQUEST = 1; //登录请求

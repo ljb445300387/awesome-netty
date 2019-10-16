@@ -9,5 +9,6 @@ import lombok.Data;
 public class Response {
     private String requestId;
     private Throwable error;
-    private Object result; //返回结果（客户端需要的结果）
+    //返回结果（客户端需要的结果）
+    private Object result;
 }

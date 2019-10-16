@@ -15,6 +15,8 @@ public class ChatServerInitializer extends ChannelInitializer<Channel> {
     public ChatServerInitializer(ChannelGroup group) {
         this.group = group;
     }
+
+    @Override
     protected void initChannel(Channel channel) throws Exception {
         ChannelPipeline pipeline = channel.pipeline();
         pipeline.addLast(new HttpServerCodec());

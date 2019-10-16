@@ -44,13 +44,11 @@ public class NettyServer {
                     .childHandler(channelInitializer);
 
             channelFuture = bootstrap.bind().sync();
-            channelFuture.addListener(new GenericFutureListener<Future<? super Void>>() {
-                public void operationComplete(Future<? super Void> future) throws Exception {
-                    if (future.isSuccess()) {
-                        log.info(new Date() + ": 端口[" + config.getTcpPort() + "]绑定成功!");
-                    } else {
-                        log.info("端口[" + config.getTcpPort() + "]绑定失败!");
-                    }
+            channelFuture.addListener(future -> {
+                if (future.isSuccess()) {
+                    log.info(new Date() + ": 端口[" + config.getTcpPort() + "]绑定成功!");
+                } else {
+                    log.info("端口[" + config.getTcpPort() + "]绑定失败!");
                 }
             });
         } catch (Exception e) {
@@ -61,7 +59,7 @@ public class NettyServer {
     }
 
     @PreDestroy
-    public void stop() throws InterruptedException {
+    public void stop() {
         log.info("Stopping Netty Server......");
         try {
             channelFuture.channel().close();

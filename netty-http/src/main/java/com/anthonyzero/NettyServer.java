@@ -22,13 +22,13 @@ public class NettyServer {
             bootstrap.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 1024)
-                    .childOption(ChannelOption.TCP_NODELAY,true)
-                    .childOption(ChannelOption.SO_KEEPALIVE,true)
+                    .childOption(ChannelOption.TCP_NODELAY, true)
+                    .childOption(ChannelOption.SO_KEEPALIVE, true)
                     .handler(new LoggingHandler(LogLevel.INFO))
                     .childHandler(new ServerInitializer());
 
             Channel channel = bootstrap.bind(PORT).sync().channel();
-            System.out.println("Netty http server listening on port "+ PORT);
+            System.out.println("Netty http server listening on port " + PORT);
             channel.closeFuture().sync();
         } finally {
             bossGroup.shutdownGracefully();

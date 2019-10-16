@@ -12,17 +12,23 @@ import java.util.Map;
 /**
  * 魔数 + 版本号（1字节） + 序列化算法（1字节） + 指令（1字节） + 数据长度  + 数据内容
  * 封装成二进制
+ *
+ * @author admin
  */
 public class PacketCodec {
 
 
-    public static final int MAGIC_NUMBER = 0x12345678; //第一个字段是魔数 4个字节
-    private final Map<Byte, Class<? extends Packet>> packetTypeMap; //每个指令 对应一个数据包
-    private final Map<Byte, Serializer> serializerMap; //序列化算法 对应 它的实现
+    //第一个字段是魔数 4个字节
+    public static final int MAGIC_NUMBER = 0x12345678;
+    //每个指令 对应一个数据包
+    private final Map<Byte, Class<? extends Packet>> packetTypeMap;
+    //序列化算法 对应 它的实现
+    private final Map<Byte, Serializer> serializerMap;
 
-    public static final PacketCodec INSTANCE = new PacketCodec();  //实例 单例
+    //实例 单例
+    public static final PacketCodec INSTANCE = new PacketCodec();
 
-    private PacketCodec()  {
+    private PacketCodec() {
         // 对于每一种业务handler 所对应的请求 响应数据 要记住添加在这 否则序列化失败
         packetTypeMap = new HashMap<>();
         packetTypeMap.put(Command.LOGIN_REQUEST, LoginRequestPacket.class);
@@ -50,7 +56,8 @@ public class PacketCodec {
     }
 
     /**
-     * 数据编码 -》 bytebuf
+     * 数据编码 -> byteBuf
+     *
      * @param byteBuf
      * @param packet
      */
@@ -69,6 +76,7 @@ public class PacketCodec {
 
     /**
      * 数据解析
+     *
      * @param byteBuf
      * @return
      */
@@ -92,10 +100,13 @@ public class PacketCodec {
         byte[] bytes = new byte[length];
         byteBuf.readBytes(bytes);
 
-        Class<? extends Packet> requestPacket = packetTypeMap.get(command); //数据包class
-        Serializer serializer = serializerMap.get(serializeAlgorithm); //序列算法实现
+        //数据包class
+        Class<? extends Packet> requestPacket = packetTypeMap.get(command);
+        //序列算法实现
+        Serializer serializer = serializerMap.get(serializeAlgorithm);
         if (requestPacket != null && serializer != null) {
-            return serializer.deserialize(requestPacket, bytes); //反序列化
+            //反序列化
+            return serializer.deserialize(requestPacket, bytes);
         }
         return null;
     }

@@ -3,10 +3,10 @@ package com.anthonyzero.client;
 import com.anthonyzero.client.handler.*;
 import com.anthonyzero.codec.PacketDecoder;
 import com.anthonyzero.codec.PacketEncoder;
-import com.anthonyzero.codec.Spliter;
+import com.anthonyzero.codec.Splitter;
 import com.anthonyzero.console.ConsoleCommandManager;
 import com.anthonyzero.console.LoginConsoleCommand;
-import com.anthonyzero.handler.IMIdleStateHandler;
+import com.anthonyzero.handler.ImIdleStateHandler;
 import com.anthonyzero.utils.SessionUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -19,7 +19,8 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class WechatClient {
-    private static final int MAX_RETRY = 5; //重试次数
+    //重试次数
+    private static final int MAX_RETRY = 5;
     private static final String HOST = "127.0.0.1";
     private static final int PORT = 7000;
 
@@ -31,17 +32,21 @@ public class WechatClient {
         bootstrap
                 .group(workGroup)
                 .channel(NioSocketChannel.class)
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000) //连接的超时时间
-                .option(ChannelOption.SO_KEEPALIVE, true) //开启 TCP 底层心跳机制
-                .option(ChannelOption.TCP_NODELAY, true) //是否开始 Nagle 算法，true 表示关闭，false 表示开启
+                //连接的超时时间
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
+                //开启 TCP 底层心跳机制
+                .option(ChannelOption.SO_KEEPALIVE, true)
+                //是否开始 Nagle 算法，true 表示关闭，false 表示开启
+                .option(ChannelOption.TCP_NODELAY, true)
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
-                        ChannelPipeline pipeline = socketChannel.pipeline(); // handler顺序 从上到下
+                        // handler顺序 从上到下
+                        ChannelPipeline pipeline = socketChannel.pipeline();
                         // 空闲检测
-                        pipeline.addLast(new IMIdleStateHandler());
+                        pipeline.addLast(new ImIdleStateHandler());
                         // 拆包
-                        pipeline.addLast(new Spliter());
+                        pipeline.addLast(new Splitter());
                         // 解码器
                         pipeline.addLast(new PacketDecoder());
                         // 登录响应
@@ -105,15 +110,15 @@ public class WechatClient {
         Scanner scanner = new Scanner(System.in);
 
         new Thread(() -> {
-           while (!Thread.interrupted()) {
-              if (!SessionUtil.hasLogin(channel)) {
-                  //进行登录
-                  loginConsoleCommand.exec(scanner, channel);
-              } else {
-                  //登录之后的聊天
-                  new ConsoleCommandManager().exec(scanner, channel);
-              }
-           }
+            while (!Thread.interrupted()) {
+                if (!SessionUtil.hasLogin(channel)) {
+                    //进行登录
+                    loginConsoleCommand.exec(scanner, channel);
+                } else {
+                    //登录之后的聊天
+                    new ConsoleCommandManager().exec(scanner, channel);
+                }
+            }
         }).start();
     }
 }

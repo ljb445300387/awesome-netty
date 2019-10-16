@@ -32,6 +32,7 @@ public class HelloClientHandler extends ChannelInboundHandlerAdapter implements 
     }
 
     //发送的时候 放到线程池 处理调用call 方法
+    @Override
     public Object call() throws Exception {
         context.writeAndFlush(para); //发送数据
         synchronized (obj) {

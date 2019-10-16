@@ -1,4 +1,5 @@
 package com.anthonyzero.chapter4;
+
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -24,8 +25,7 @@ public class NettyNioServer {
                     .localAddress(new InetSocketAddress(port))
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                                       @Override
-                                      public void initChannel(SocketChannel ch)
-                                              throws Exception {
+                                      public void initChannel(SocketChannel ch) throws Exception {
                                           ch.pipeline().addLast(new ChannelInboundHandlerAdapter() {
                                               @Override
                                               public void channelActive(ChannelHandlerContext ctx) throws Exception {

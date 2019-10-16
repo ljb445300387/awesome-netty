@@ -6,6 +6,9 @@ import io.netty.channel.ChannelPromise;
 
 import java.net.SocketAddress;
 
+/**
+ * @author admin
+ */
 public class ServerOutHandler extends ChannelOutboundHandlerAdapter {
 
     @Override
@@ -25,8 +28,6 @@ public class ServerOutHandler extends ChannelOutboundHandlerAdapter {
         super.disconnect(ctx, promise);
         System.out.println("服务端disconnect");
     }
-
-
 
     @Override
     public void read(ChannelHandlerContext ctx) throws Exception {

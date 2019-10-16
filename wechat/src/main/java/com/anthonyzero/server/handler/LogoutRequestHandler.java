@@ -7,6 +7,9 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
+/**
+ * @author admin
+ */
 @ChannelHandler.Sharable
 public class LogoutRequestHandler extends SimpleChannelInboundHandler<LogoutRequestPacket> {
     public static final LogoutRequestHandler INSTANCE = new LogoutRequestHandler();
@@ -14,8 +17,10 @@ public class LogoutRequestHandler extends SimpleChannelInboundHandler<LogoutRequ
     private LogoutRequestHandler() {
 
     }
+
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, LogoutRequestPacket logoutRequestPacket) throws Exception {
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext,
+                                LogoutRequestPacket logoutRequestPacket) throws Exception {
         SessionUtil.unBindSession(channelHandlerContext.channel());
         LogoutResponsePacket logoutResponsePacket = new LogoutResponsePacket();
         logoutResponsePacket.setSuccess(true);

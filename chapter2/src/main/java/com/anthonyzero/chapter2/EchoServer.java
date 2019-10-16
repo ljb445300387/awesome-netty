@@ -33,6 +33,7 @@ public class EchoServer {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         //当一个新的连接
                         //被接受时，一个新的子 Channel 将会被创建
+                        @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             socketChannel.pipeline().addLast(handler);
                         }

@@ -13,6 +13,8 @@ import java.util.Date;
 
 /**
  * 客户端登录请求 处理
+ *
+ * @author admin
  */
 @ChannelHandler.Sharable
 public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginRequestPacket> {
@@ -22,16 +24,18 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
     protected LoginRequestHandler() {
     }
 
-
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, LoginRequestPacket loginRequestPacket) throws Exception {
-        LoginResponsePacket response = new LoginResponsePacket(); //响应
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext,
+                                LoginRequestPacket loginRequestPacket) {
+        //响应
+        LoginResponsePacket response = new LoginResponsePacket();
         response.setVersion(loginRequestPacket.getVersion());
         response.setUserName(loginRequestPacket.getUserName());
 
         if (valid(loginRequestPacket)) {
             response.setSuccess(true);
-            String userId = IDUtil.randomId(); //这随机生成一个userid 作为用户标识
+            //这随机生成一个userid 作为用户标识
+            String userId = IDUtil.randomId();
             response.setUserId(userId);
             System.out.println("[" + loginRequestPacket.getUserName() + "]登录成功");
             SessionUtil.bindSession(channelHandlerContext.channel(), new Session(userId, loginRequestPacket.getUserName()));
@@ -47,6 +51,7 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
 
     /**
      * 默认都登录成功
+     *
      * @param loginRequestPacket
      * @return
      */

@@ -8,12 +8,13 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 每隔一段时间，检测这段时间内是否有数据读写
+ * @author admin
  */
-public class IMIdleStateHandler extends IdleStateHandler {
+public class ImIdleStateHandler extends IdleStateHandler {
 
     private static final int READER_IDLE_TIME = 15;
 
-    public IMIdleStateHandler() {
+    public ImIdleStateHandler() {
         //如果 15 秒内没有读到数据，就表示连接假死 回调 channelIdle() 方法
         super(READER_IDLE_TIME, 0, 0, TimeUnit.SECONDS);
     }

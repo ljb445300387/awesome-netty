@@ -9,13 +9,19 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author admin
+ */
 @ChannelHandler.Sharable
-public class IMHandler extends SimpleChannelInboundHandler<Packet> {
-    public static final IMHandler INSTANCE = new IMHandler();
+public class ImHandler extends SimpleChannelInboundHandler<Packet> {
+    public static final ImHandler INSTANCE = new ImHandler();
 
-    private Map<Byte, SimpleChannelInboundHandler<? extends Packet>> handlerMap; //存放指令到各个指令处理器的映射
+    /**
+     * 存放指令到各个指令处理器的映射
+     */
+    private Map<Byte, SimpleChannelInboundHandler<? extends Packet>> handlerMap;
 
-    private IMHandler() {
+    private ImHandler() {
         handlerMap = new HashMap<>();
 
         handlerMap.put(Command.MESSAGE_REQUEST, MessageRequestHandler.INSTANCE);
